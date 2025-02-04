@@ -23,7 +23,7 @@ RUN apt install -y \
   libgmp3-dev
 
 # gcc-8 will segfault when trying to compile gd for arm, so try different compiler
-ENV C=gcc-7
+ENV CC=gcc-7
 
 # Install the PHP 7.2 extensions we need
 RUN docker-php-ext-install \
@@ -36,7 +36,7 @@ RUN docker-php-ext-install \
   gmp
 
 # gcc-7 will segfault when trying to compile acpu for arm, so try different compiler
-ENV C=gcc-8
+ENV CC=gcc-8
 
 # Use pecl to install acpu
 RUN \
