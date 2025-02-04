@@ -13,7 +13,6 @@ RUN apt -y upgrade && apt -y dist-upgrade
 
 # Install the packages we need
 RUN apt install -y \
-  gcc-7 \
   curl \
   libxml2 \
   libxml2-dev \
@@ -22,11 +21,8 @@ RUN apt install -y \
   libpng-dev \
   libgmp3-dev
 
-# gcc-8 will segfault when trying to compile gd for arm, so try different compiler
-ENV CC=gcc-7
-
 # Install the PHP 7.2 extensions we need
-RUN docker-php-ext-install \
+RUN docker-php-ext-install -j$(nproc) \
   soap \
   gd \
   mysqli \
@@ -34,9 +30,6 @@ RUN docker-php-ext-install \
   opcache \
   intl \
   gmp
-
-# gcc-7 will segfault when trying to compile acpu for arm, so try different compiler
-ENV CC=gcc-8
 
 # Use pecl to install acpu
 RUN \

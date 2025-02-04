@@ -15,8 +15,6 @@ RUN apt clean && apt autoclean && apt update && apt -y upgrade
 RUN \
   apt install -y \
     curl \
-    gcc-9 \
-    gcc-10 \
     libpng16-16 \
     libjpeg62-turbo \
     libfreetype6 \
@@ -31,7 +29,7 @@ RUN \
     opcache  \
     pdo_mysql \
     gd &&\
-  export CC=gcc-9 && docker-php-ext-install -j$(nproc) intl &&\
+  docker-php-ext-install -j$(nproc) intl &&\
   apt -y remove \
     libgmp-dev \
     libicu-dev \
