@@ -13,32 +13,33 @@ RUN apt clean && apt autoclean && apt update && apt -y upgrade
 ENV CC clang
 
 # Install the packages we need
-RUN apt install -y \
-  curl \
-  clang \
-  libpng16-16 \
-  libjpeg62-turbo \
-  libfreetype6 \
-  libgmp-dev \
-  libicu-dev \
-  libfreetype6-dev \
-  libjpeg62-turbo-dev \
-  libpng-dev &&\
-  docker-php-ext-configure gd --with-freetype --with-jpeg &&\
-  docker-php-ext-install -j$(nproc) gmp \
-  opcache  \
-  intl \
-  pdo_mysql \
-  gd &&\
-  apt -y remove libgmp-dev \
-  libicu-dev \
-  libfreetype6-dev \
-  libjpeg62-turbo-dev \
-  libpng-dev && \
-  apt autoremove -y && \
-  apt clean && \
-  apt autoclean && \
-  rm -rf /var/lib/apt/lists/*
+# do some compiler magic, because some packages fail to compile with gcc, others fail with clang
+RUN \
+  apt install -y \
+    curl \
+    clang \
+    libpng16-16 \
+    libjpeg62-turbo \
+    libfreetype6 \
+    libgmp-dev \
+    libicu-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev &&\
+  export CC=gcc && docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    gmp \
+    opcache  \
+    pdo_mysql \
+    gd &&\
+  export CC=clang && docker-php-ext-install -j$(nproc) intl &&\
+  apt -y remove \
+    libgmp-dev \
+    libicu-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev && \
+  apt autoremove --purge -y && \
+  rm -rf /var/lib/apt/lists/* /var/cache/apt
 
 # Enable the Apache2 modules we need and disable the ones we don't need
 RUN a2enmod rewrite headers expires proxy_fcgi remoteip && \
