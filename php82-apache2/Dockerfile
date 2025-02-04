@@ -10,8 +10,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt clean && apt autoclean && apt update && apt -y upgrade
 
-ENV CC clang
-
 # Install the packages we need
 # do some compiler magic, because some packages fail to compile with gcc, others fail with clang
 RUN \
@@ -25,8 +23,9 @@ RUN \
     libicu-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libpng-dev &&\
-  export CC=gcc && docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    libpng-dev && \
+  export CC=gcc && docker-php-ext-configure \
+    gd --with-freetype --with-jpeg \
     gmp \
     opcache  \
     pdo_mysql \
