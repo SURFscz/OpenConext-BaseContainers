@@ -4,8 +4,10 @@ FROM debian:bookworm-slim
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt update && \
   apt -y upgrade && \
-  apt -y install -y apache2 \
-  curl
+  apt -y install -y  \
+    apache2 \
+    curl \
+    xz-utils
 
 # Clean up
 RUN apt autoremove -y && \
@@ -31,8 +33,7 @@ RUN \
     rewrite \
     remoteip \
     ssl \
-    xml2enc \
-    xz-utils  && \
+    xml2enc && \
   a2enconf openconext
 
 # Copy the startup script
