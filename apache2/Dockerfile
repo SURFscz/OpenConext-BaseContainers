@@ -31,7 +31,8 @@ RUN \
     rewrite \
     remoteip \
     ssl \
-    xml2enc && \
+    xml2enc \
+    xz-utils  && \
   a2enconf openconext
 
 # Copy the startup script
